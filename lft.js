@@ -41,11 +41,12 @@ http.createServer(async (req, res) => {
 
         default:
             res.writeHead(200, { 'Content-Type': 'text/html' })
-            res.write(html.replace("%versionData%", "LFT v0.0.1"))
+            res.write(html)
             res.end()
     }
 }).listen(PORT)
 
+console.clear();
 console.info("Running on port " + PORT)
 
 var os = require('os');
@@ -62,7 +63,7 @@ for (var k in interfaces) {
 }
 
 addresses.forEach(address => {
-    console.info(`http://${address[0]}:${PORT}`)
+    console.info(`http://${address}:${PORT}`)
 })
 
 const html = `
@@ -93,12 +94,12 @@ const html = `
         </form>
         <br>
         <br>
-        %versionData%
+        LFT v0.0.1
     </center>
     <script>
         document.getElementById("form").action = "upload|" + document.getElementById("file").files[0].name
         document.getElementById("file").addEventListener("input", evt => {
-            document.getElementById("form").action = "upload|" + document.getElementById("file").files[0].name
+            document.getElementById("form").setAttribute("action", "upload|" + document.getElementById("file").files[0].name)
         })
     </script>
 </body>
