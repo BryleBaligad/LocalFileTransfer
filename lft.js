@@ -81,7 +81,7 @@ const html = `
     <script>
         document.getElementById("form").action = "upload|" + document.getElementById("file").files[0].name
         document.getElementById("file").addEventListener("input", evt => {
-            document.getElementById("form").action = "upload?" + document.getElementById("file").files[0].name
+            document.getElementById("form").action = "upload|" + document.getElementById("file").files[0].name
         })
     </script>
 </body>
