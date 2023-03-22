@@ -6,7 +6,10 @@
   "bin": "./lft.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm i && npx pkg -t node18-linux,node18-macos,node18-win ."
+    "pkg": "npm i && npx pkg -t node18-linux,node18-macos,node18-win .",
+    "pkg-win32": "npm i && npx pkg -t node18-win .",
+    "pkg-macos": "npm i && npx pkg -t node18-macos .",
+    "pkg-linux": "npm i && npx pkg -t node18-linux ."
   },
   "author": "Bryle Baligad",
   "license": "ISC",

@@ -4,4 +4,9 @@ Because why not, here's a web-based file transfer doohickey, as if we needed ano
 
 ---
 
-To build binaries, clone this repo and run `npm run build`
+To create binaries, clone this repo and run any of the following
+
+- `npm run pkg` (all platforms)
+- `npm run pkg-win32` (Windows)
+- `npm run pkg-macos` (macOS)
+- `npm run pkg-linux` (Linux)
