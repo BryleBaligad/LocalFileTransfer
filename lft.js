@@ -8,16 +8,18 @@ const PORT = process.env.PORT || 9876;
 const SAVEPATH = process.env.SAVEPATH || "./" ;
 
 http.createServer(async (req, res) => {
-    switch (req.url.split("|")[0]) {
+    switch (decodeURIComponent(req.url).split("|")[0]) {
         case "/upload":
             console.clear();
             console.log("Incoming File Transfer!");
-            let acceptFile = await prompt(`Accept incoming file "${decodeURIComponent(req.url.split("|")[1])}"? [Y/n] `);
+            let acceptFile = await prompt(`Accept incoming file "${decodeURIComponent(req.url).split("|")[1]}"? [Y/n] `);
 
-            if (acceptFile.toLowerCase() != "y" || acceptFile != "") {
+            if ((acceptFile.toLowerCase() !== "y") && (acceptFile.length > 0)) {
                 console.log("File rejected")
+                res.writeHead(403, { 'Content-Type': 'text/html' })
                 res.write("Upload rejected by host");
-                return res.end();
+                res.end();
+                return;
             }
 
             let form = new formidable.IncomingForm({ maxFileSize: 1024 * 1024 * 1024});
@@ -34,6 +36,7 @@ http.createServer(async (req, res) => {
                 fs.cp(oldpath, newpath, async err => {
                     if (err) throw err;
                     console.log(`File received! Saved to ${newpath}`)
+                    res.writeHead(200, { 'Content-Type': 'text/html' })
                     res.write("Uploaded");
                     res.end();
                 })
