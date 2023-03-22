@@ -1,0 +1,4 @@
+node_modules/
+localfiletransfer-linux
+localfiletransfer-macos
+localfiletransfer-win.exe

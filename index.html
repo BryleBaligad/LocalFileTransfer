@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <title>Local File Upload</title>
+</head>
+<body>
+    <center>
+        <h1>Local File Transfer</h1>
+        Select a file below and click submit query to upload.
+        <br>
+        <br>
+        <form id="form" action="upload" method="post" enctype="multipart/form-data">
+            <input id="file" type="file" name="file" required>
+            <br>
+            <br>
+            <input type="submit">
+        </form>
+        <br>
+        <br>
+        %versionData%
+    </center>
+    <script>
+        document.getElementById("form").action = "upload|" + document.getElementById("file").files[0].name
+        document.getElementById("file").addEventListener("input", evt => {
+            document.getElementById("form").action = "upload?" + document.getElementById("file").files[0].name
+        })
+    </script>
+</body>
+</html>
