@@ -18,20 +18,20 @@
         <br>
         <br>
         <form id="form" action="upload" method="post" enctype="multipart/form-data">
-            <input id="file" type="file" name="file" required>
+            <input id="file" type="file" name="file" required onchange="setAction()">
             <br>
             <br>
             <input type="submit">
         </form>
         <br>
         <br>
-        %versionData%
+        LFT v0.0.1
     </center>
     <script>
-        document.getElementById("form").action = "upload|" + document.getElementById("file").files[0].name
-        document.getElementById("file").addEventListener("input", evt => {
+        setAction()
+        function setAction() {
             document.getElementById("form").setAttribute("action", "upload|" + document.getElementById("file").files[0].name)
-        })
+        }
     </script>
 </body>
 </html>

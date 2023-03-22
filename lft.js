@@ -12,31 +12,33 @@ http.createServer(async (req, res) => {
         case "/upload":
             console.clear();
             console.log("Incoming File Transfer!");
-            let acceptFile = await prompt(`Accept incoming file "${decodeURIComponent(req.url.split("|")[1])}" [Y/n] `);
-            if (acceptFile.toLowerCase() == "y" || acceptFile.toLowerCase() == "") {
-                let form = new formidable.IncomingForm({ maxFileSize: 1024 * 1024 * 1024});
-                var bar = new cliProgress.SingleBar({etaBuffer: 64, fps: 1, format: '[{bar}] {percentage}% | ETA: {eta}s | {value}/{total}'}, cliProgress.Presets.legacy)
-                bar.start(100, 0);
-                form.on("progress", (d, m) => {
-                    bar.setTotal(m)
-                    bar.update(d)
-                })
-                form.parse(req, async (err, fields, files) => {
-                    bar.stop();
-                    var oldpath = files.file.filepath;
-                    var newpath = SAVEPATH + files.file.originalFilename;
-                    fs.cp(oldpath, newpath, async err => {
-                        if (err) throw err;
-                        console.log(`File received! Saved to ${newpath}`)
-                        res.write("Uploaded");
-                        res.end();
-                    })
-                })
-            } else {
+            let acceptFile = await prompt(`Accept incoming file "${decodeURIComponent(req.url.split("|")[1])}"? [Y/n] `);
+
+            if (acceptFile.toLowerCase() != "y" || acceptFile != "") {
                 console.log("File rejected")
                 res.write("Upload rejected by host");
-                res.end();
+                return res.end();
             }
+
+            let form = new formidable.IncomingForm({ maxFileSize: 1024 * 1024 * 1024});
+            var bar = new cliProgress.SingleBar({etaBuffer: 64, fps: 1, format: '[{bar}] {percentage}% | ETA: {eta}s | {value}/{total}'}, cliProgress.Presets.legacy)
+            bar.start(100, 0);
+            form.on("progress", (d, m) => {
+                bar.setTotal(m)
+                bar.update(d)
+            })
+            form.parse(req, async (err, fields, files) => {
+                bar.stop();
+                var oldpath = files.file.filepath;
+                var newpath = SAVEPATH + files.file.originalFilename;
+                fs.cp(oldpath, newpath, async err => {
+                    if (err) throw err;
+                    console.log(`File received! Saved to ${newpath}`)
+                    res.write("Uploaded");
+                    res.end();
+                })
+            })
+
             break;
 
         default:
@@ -63,7 +65,7 @@ for (var k in interfaces) {
 }
 
 addresses.forEach(address => {
-    console.info(`http://${address}:${PORT}`)
+    console.info(`${addresses.indexOf(address)}: http://${address}:${PORT}`)
 })
 
 const html = `
@@ -87,7 +89,7 @@ const html = `
         <br>
         <br>
         <form id="form" action="upload" method="post" enctype="multipart/form-data">
-            <input id="file" type="file" name="file" required>
+            <input id="file" type="file" name="file" required onchange="setAction()">
             <br>
             <br>
             <input type="submit">
@@ -97,10 +99,10 @@ const html = `
         LFT v0.0.1
     </center>
     <script>
-        document.getElementById("form").action = "upload|" + document.getElementById("file").files[0].name
-        document.getElementById("file").addEventListener("input", evt => {
+        setAction()
+        function setAction() {
             document.getElementById("form").setAttribute("action", "upload|" + document.getElementById("file").files[0].name)
-        })
+        }
     </script>
 </body>
 </html>
