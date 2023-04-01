@@ -6,6 +6,7 @@ const cliProgress = require("cli-progress")
 
 const PORT = process.env.PORT || 9876;
 const SAVEPATH = process.env.SAVEPATH || "./" ;
+const MAXFILESIZE_GB = 10;
 
 http.createServer(async (req, res) => {
     switch (decodeURIComponent(req.url).split("|")[0]) {
@@ -22,7 +23,7 @@ http.createServer(async (req, res) => {
                 return;
             }
 
-            let form = new formidable.IncomingForm({ maxFileSize: 1024 * 1024 * 1024});
+            let form = new formidable.IncomingForm({ maxFileSize: 1024 * 1024 * 1024 * MAXFILESIZE_GB});
             var bar = new cliProgress.SingleBar({etaBuffer: 64, fps: 1, format: '[{bar}] {percentage}% | ETA: {eta}s | {value}/{total}'}, cliProgress.Presets.legacy)
             bar.start(100, 0);
             form.on("progress", (d, m) => {

@@ -1,6 +1,6 @@
 {
   "name": "localfiletransfer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Local File Transfer",
   "main": "lft.js",
   "bin": "./lft.js",
